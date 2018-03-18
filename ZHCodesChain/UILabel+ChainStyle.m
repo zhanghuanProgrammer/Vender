@@ -99,13 +99,6 @@
 	};
 }
 
-- (UILabel *(^)(BOOL))mAllowsdefaulttighteningfortruncation {
-	return ^id(BOOL allowsDefaultTighteningForTruncation) {
-		self.allowsDefaultTighteningForTruncation = allowsDefaultTighteningForTruncation;
-		return self;
-	};
-}
-
 - (UILabel *(^)(NSAttributedString *))mAttributedtext {
 	return ^id(NSAttributedString * attributedText) {
 		self.attributedText = attributedText;

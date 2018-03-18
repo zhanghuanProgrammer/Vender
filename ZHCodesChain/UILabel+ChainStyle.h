@@ -30,8 +30,6 @@
 
 - (UILabel *(^)(CGFloat minimumScaleFactor))mMinimumscalefactor;
 
-- (UILabel *(^)(BOOL allowsDefaultTighteningForTruncation))mAllowsdefaulttighteningfortruncation;
-
 - (UILabel *(^)(NSAttributedString * attributedText))mAttributedtext;
 
 - (UILabel *(^)(CGSize shadowOffset))mShadowoffset;
