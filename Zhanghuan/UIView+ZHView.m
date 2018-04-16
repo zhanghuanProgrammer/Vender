@@ -1,5 +1,6 @@
 
 #import "UIView+ZHView.h"
+#import "GradientView.h"
 
 @implementation UIView (ZHView)
 
@@ -117,6 +118,14 @@
 
 -(CGFloat)maxY{
     return CGRectGetMaxY(self.frame);
+}
+
+- (UIWindow *)getWindow{
+    if ([self isKindOfClass:[UIWindow class]]) return (UIWindow *)self;
+    return [self.superview getWindow];
+}
+- (CGRect)frameInWindow{
+    return [self convertRect:self.bounds toView:[self getWindow]];
 }
 
 - (void)cornerRadius{
@@ -347,10 +356,40 @@
 }
 
 - (void)addShadowWithShadowOffset:(CGSize)shadowOffset{
-    self.layer.shadowOpacity=0.5;
+    self.layer.shadowOpacity=1;
     self.layer.shadowOffset=shadowOffset;
-    self.layer.shadowColor=[UIColor grayColor].CGColor;
+    self.layer.shadowColor=[UIColor blackColor].CGColor;
     self.layer.shadowRadius=1;
+}
+
+- (void)addShadowWithShadowOffsetByAddView:(CGSize)shadowOffset{
+    [self removeShadowView];
+    UIView *view = [[UIView alloc]initWithFrame:self.frame];
+    view.backgroundColor=[self.backgroundColor colorWithAlphaComponent:0.2];
+    view.tag = 1657;
+    [view addShadowWithShadowOffset:shadowOffset];
+    view.layer.cornerRadius = self.layer.cornerRadius;
+    view.layer.shadowRadius=2;
+    [self.superview insertSubview:view atIndex:[self.superview.subviews indexOfObject:self]];
+}
+
+- (void)removeShadowView{
+    UIView *target = nil;
+    for (UIView *view in self.superview.subviews) {
+        if (CGRectEqualToRect(view.frame, self.frame) && view.tag == 1657) {
+            target = view;
+            break;
+        }
+    }
+    if (target) {
+        [target removeFromSuperview];
+    }
+}
+
+- (void)removeShadow{
+    self.layer.shadowOpacity=0.0;
+    self.layer.shadowColor=[UIColor clearColor].CGColor;
+    self.layer.shadowRadius=0;
 }
 
 - (void)rotationAnimationDuration:(CGFloat)duration{
@@ -404,6 +443,37 @@
         }
     }
     return nil;
+}
+
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor{
+    [self gradientStartColor:startColor endColor:endColor startPoint:CGPointMake(0,0) endPoint:CGPointMake(self.width, self.height)];
+}
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor frame:(CGRect)frame{
+    [self gradientStartColor:startColor endColor:endColor startPoint:CGPointMake(0,0) endPoint:CGPointMake(self.width, self.height) frame:frame];
+}
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint{
+    [self gradientStartColor:startColor endColor:endColor startPoint:startPoint endPoint:endPoint frame:self.frame];
+}
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint frame:(CGRect)frame{
+    UIView *gradientTarget = nil;
+    for (UIView *view in self.superview.subviews) {
+        if ([view isKindOfClass:[GradientView class]]) {
+            gradientTarget = view;
+            break;
+        }
+    }
+    if (gradientTarget) {
+        [gradientTarget removeFromSuperview];
+    }
+    GradientView *gradient = [[GradientView alloc]initWithFrame:frame];
+    gradient.userInteractionEnabled=NO;
+    gradient.startPoint = startPoint;
+    gradient.endPoint = endPoint;
+    gradient.startColor = startColor;
+    gradient.endColor = endColor;
+    gradient.backgroundColor = [UIColor clearColor];
+    [gradient cornerRadiusWithFloat:self.layer.cornerRadius borderColor:[UIColor colorWithCGColor:self.layer.borderColor] borderWidth:self.layer.borderWidth];
+    [self.superview insertSubview:gradient atIndex:[self.superview.subviews indexOfObject:self]];
 }
 
 @end

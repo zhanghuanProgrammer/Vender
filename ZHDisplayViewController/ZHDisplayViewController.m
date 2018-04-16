@@ -8,7 +8,6 @@
 @interface ZHDisplayViewController ()<UIScrollViewDelegate>
 
 /** 标题滚动视图 */
-@property (nonatomic, weak) UIScrollView *titleScrollView;
 @property (nonatomic, weak) UIScrollView *contentScrollView;
 @property (nonatomic, strong) NSMutableArray *titleLabels;
 @property (nonatomic, strong) NSMutableArray *subTitleLabels;
@@ -260,8 +259,7 @@
     
     // 设置标题滚动视图的内容范围
     UILabel *lastLabel = self.titleLabels.lastObject;
-    
-    _titleScrollView.contentSize = CGSizeMake(CGRectGetMaxX(lastLabel.frame)+_titleMargin/2.0, 0);
+    _titleScrollView.contentSize = CGSizeMake(self.titleScrollFullWitdh?[UIScreen mainScreen].bounds.size.width:CGRectGetMaxX(lastLabel.frame)+_titleMargin/2.0, 0);
     _titleScrollView.showsHorizontalScrollIndicator = NO;
     _titleScrollView.backgroundColor = self.titleScrollViewColor;
     
@@ -384,9 +382,7 @@
     }
     
     if (totalWidth > self.ZHScreenW) {
-        
         _titleMargin = margin;
-        
         return;
     }
     
@@ -403,7 +399,8 @@
     
     CGFloat titleH = _titleHeight>0?_titleHeight:ZHTitleScrollViewH;
     
-    titleScrollView.frame = CGRectMake(-1, y-1, self.ZHScreenW+1, titleH+1);
+    
+    titleScrollView.frame = CGRectMake(-1, y-1,self.titleScrollFullWitdh?[UIScreen mainScreen].bounds.size.width: self.ZHScreenW+2, titleH+1);
     
     [self.view addSubview:titleScrollView];
     
@@ -454,6 +451,9 @@
 }
 /**设置标题颜色渐变*/
 - (void)setUpTitleColorGradientWithOffset:(CGFloat)offsetX rightLabel:(ZHDisplayTitleLabel *)rightLabel leftLabel:(ZHDisplayTitleLabel *)leftLabel withIndex:(NSInteger)index{
+    if (self.selectUseFontWeight) {
+        return;
+    }
     // 获取右边缩放
     CGFloat rightSacle = offsetX / self.ZHScreenW - index;
     
@@ -488,6 +488,9 @@
 }
 /**设置子标题颜色渐变*/
 - (void)setUpSubTitleColorGradientWithOffset:(CGFloat)offsetX rightLabel:(ZHDisplayTitleLabel *)rightLabel leftLabel:(ZHDisplayTitleLabel *)leftLabel withIndex:(NSInteger)index{
+    if (self.selectUseFontWeight) {
+        return;
+    }
     // 获取右边缩放
     CGFloat rightSacle = offsetX / self.ZHScreenW - index;
     
@@ -495,7 +498,6 @@
     CGFloat offsetDelta = offsetX - _lastOffsetX;
     
     if (offsetDelta > 0) { // 往右边
-        
         rightLabel.fillColor = self.selColor;
         rightLabel.progress = rightSacle;
         

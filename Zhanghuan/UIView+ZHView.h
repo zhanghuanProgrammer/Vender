@@ -31,6 +31,8 @@
 
 @property (assign, nonatomic, readonly) CGFloat maxY;
 
+- (CGRect)frameInWindow;
+
 /**给控件设置成圆角*/
 - (void)cornerRadius;
 
@@ -78,6 +80,9 @@
 
 /**添加阴影*/
 - (void)addShadowWithShadowOffset:(CGSize)shadowOffset;
+- (void)removeShadow;
+- (void)addShadowWithShadowOffsetByAddView:(CGSize)shadowOffset;
+- (void)removeShadowView;
 
 - (void)rotationAnimationDuration:(CGFloat)duration;
 
@@ -86,5 +91,10 @@
 - (void)rotationAnimationFromValue:(CGFloat)fromValue toValue:(CGFloat)toValue duration:(CGFloat)duration;
 
 - (NSLayoutConstraint *)getLayoutConstraint:(NSLayoutAttribute)attribute;
+
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor;
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor frame:(CGRect)frame;
+- (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint frame:(CGRect)frame;
 
 @end

@@ -108,22 +108,34 @@
             @"gameType" : @[ @"竞彩亚盘", @"单关", @"大小球" ],
         };
         [self.shortMap setValue:IndexRecomentCellModelDic forKey:@"IndexRecomentCellModel"];
+        
+#pragma mark -GameEventCellModel
+        NSDictionary* GameEventCellModelDic = @{
+                                                @"rightCountries" : @[ @"哥伦比亚", @"西班牙",@"帕尔梅拉", @"不伦瑞克"  ],
+                                                @"name" : @[ @"德甲", @"欧冠" ,@"联谊赛"],
+                                                @"time" : @[ @"03/27 14:00", @"01/8 23:00" ],
+                                                @"date" : @[ @"周二001", @"周三005" ],
+                                                @"status" : @[ @"下76", @"已结束" ,@"未开始"],
+                                                @"isCollect" : @[ @(1), @(0) ],
+                                                @"leftCountries" : @[ @"哥伦比亚", @"西班牙",@"帕尔梅拉", @"不伦瑞克" ],
+                                                @"statusCode" : @[ @(1), @(0) ,@(2)],
+                                                };
+        [self.shortMap setValue:GameEventCellModelDic forKey:@"GameEventCellModel"];
+        
+#pragma mark -HomeCellModel
+        NSDictionary* HomeCellModelDic = @{
+//                                           @"leftCountries" : @[ @"哥伦比亚", @"西班牙",@"帕尔梅拉", @"不伦瑞克" ],
+//                                           @"rightCountries" : @[ @"哥伦比亚", @"西班牙",@"帕尔梅拉", @"不伦瑞克"  ],
+                                           @"gameName" : @[ @"德甲", @"欧冠" ,@"联谊赛" ],
+                                           @"job" : @[ @"央视名嘴", @"斗鱼主播" ],
+                                           @"advantage" : @[ @"最高12场连胜", @"最低100场连胜" ],
+                                           @"name" : @[ @"白温婷", @"婷白温",@"白婷温",@"婷白温"  ],
+                                           @"shootingPer" : @[ @"100%", @"96%" ,@"71%",@"89%"],
+                                           @"statusCode" : @[ @(1), @(0) ,@(2)],
+                                           };
+        [self.shortMap setValue:HomeCellModelDic forKey:@"HomeCellModel"];
     }
     return self;
-}
-
-+ (id)valueForModel:(NSString*)model name:(NSString*)name{
-    if (model.length > 0 && name.length > 0) {
-        NSDictionary* dic = [SimulationDataMap sharedObj].shortMap[model];
-        if (dic) {
-            NSArray* arr = dic[name];
-            if (arr && arr.count) {
-                id anyObject = arr[arc4random_uniform((u_int32_t)arr.count)];
-                return anyObject;
-            }
-        }
-    }
-    return nil;
 }
 
 @end
@@ -174,6 +186,20 @@
     [code appendFormat:@"};\n[self.shortMap setValue:%@Dic forKey:@\"%@\"];", clsString, clsString];
     free(properties);
     return code;
+}
+
++ (id)valueForModel:(NSString*)model name:(NSString*)name{
+    if (model.length > 0 && name.length > 0) {
+        NSDictionary* dic = [SimulationDataMap sharedObj].shortMap[model];
+        if (dic) {
+            NSArray* arr = dic[name];
+            if (arr && arr.count) {
+                id anyObject = arr[arc4random_uniform((u_int32_t)arr.count)];
+                return anyObject;
+            }
+        }
+    }
+    return nil;
 }
 
 @end

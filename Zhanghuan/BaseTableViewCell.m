@@ -24,6 +24,9 @@
     if ([obj isKindOfClass:[NSNumber class]] && [obj integerValue] == -9999) return NO;
     return YES;
 }
+- (BOOL)dataModel:(id)dataModel isExsitKey:(NSString *)key{
+    return [NSObject valueForModel:NSStringFromClass([dataModel class]) name:key];
+}
 - (void)refreshUI:(id)dataModel{
     unsigned int count;
     Class cls = [self class];
@@ -36,19 +39,19 @@
             if ([value isKindOfClass:[UIImageView class]]) {
                 UIImageView *imageView = (UIImageView *)value;
                 id image = [self dataModel:dataModel valueForKey:key type:@"ImageView"];
-                if ([self isExsit:image]) imageView.mImage(image);
+                if ([self isExsit:image] && [self dataModel:dataModel isExsitKey:key]) imageView.mImage(image);
             }else if ([value isKindOfClass:[UILabel class]]) {
                 UILabel *label = (UILabel *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"Label"];
-                if ([self isExsit:text]) label.mText(text);
+                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) label.mText(text);
             }else if ([value isKindOfClass:[UITextView class]]) {
                 UITextView *textView = (UITextView *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"TextView"];
-                if ([self isExsit:text]) textView.mText(text);
+                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) textView.mText(text);
             }else if ([value isKindOfClass:[UILabel class]]) {
                 UITextField *textField = (UITextField *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"TextField"];
-                if ([self isExsit:text]) textField.mText(text);
+                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) textField.mText(text);
             }
         }
     }

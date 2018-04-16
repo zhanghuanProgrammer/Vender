@@ -4,5 +4,6 @@
 @interface UIImage (Extension)
 
 + (UIImage *)imageWithColor:(UIColor *)color;
++ (UIImage *)imageWithColor:(UIColor *)color rect:(CGRect)rect;
 
 @end

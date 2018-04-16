@@ -23,7 +23,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [UIView new];
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.edgesForExtendedLayout=UIRectEdgeNone;
 }
 
 - (instancetype (^)(Class model,Class cell,CGFloat height))registModelAndCellAndHeight {
@@ -43,7 +43,7 @@
     return self.isSection ? [self.dataArr[section] count] : self.dataArr.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    id modelObjct = self.dataArr[indexPath.row];
+    id modelObjct = self.isSection ? self.dataArr[indexPath.section][indexPath.row] : self.dataArr[indexPath.row];
     for (NSString *cls in self.modelCells) {
         if ([modelObjct isKindOfClass:NSClassFromString(cls)]){
             NSString *cellCls = self.modelCells[cls];
@@ -64,7 +64,7 @@
     return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    id modelObjct=self.dataArr[indexPath.row];
+    id modelObjct = self.isSection ? self.dataArr[indexPath.section][indexPath.row] : self.dataArr[indexPath.row];
     for (NSString *cls in self.modelCells) {
         if ([modelObjct isKindOfClass:NSClassFromString(cls)]){
             CGFloat height = [self.cellHeights[cls] floatValue];

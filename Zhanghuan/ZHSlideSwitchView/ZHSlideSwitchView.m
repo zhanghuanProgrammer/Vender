@@ -1,5 +1,6 @@
 
 #import "ZHSlideSwitchView.h"
+#import "UIButton+Layout.h"
 
 //button间隔
 static const CGFloat ButtonMargin = 10.0f;
@@ -8,7 +9,7 @@ static const CGFloat ButtonFontNormalSize = 15.0f;
 //button标题选中大小
 static const CGFloat ButtonFontSelectedSize = 16.0f;
 //顶部ScrollView高度
-static const CGFloat TopScrollViewHeight = 44.0f;
+static const CGFloat TopScrollViewHeight = 48.0f;
 
 @interface ZHSlideSwitchView ()<UIScrollViewDelegate>
 {
@@ -18,6 +19,7 @@ static const CGFloat TopScrollViewHeight = 44.0f;
     UIView *_lineView;
     //存放按钮
     NSMutableArray *_buttons;
+    NSMutableArray *_buttonsActionReal;
 }
 @end
 
@@ -53,6 +55,7 @@ static const CGFloat TopScrollViewHeight = 44.0f;
 -(void)buildUI
 {
     _buttons = [NSMutableArray new];
+    _buttonsActionReal = [NSMutableArray new];
     _selectedIndex = 0;
     
     //防止navigationbar对ScrollView的布局产生影响
@@ -62,20 +65,20 @@ static const CGFloat TopScrollViewHeight = 44.0f;
     _topScrollView = [UIScrollView new];
     _topScrollView.showsHorizontalScrollIndicator = NO;
     _topScrollView.backgroundColor = [UIColor whiteColor];
-    _topScrollView.frame = CGRectMake(0, 0, self.bounds.size.width,TopScrollViewHeight);
+    _topScrollView.frame = CGRectMake(0, 0, self.width,TopScrollViewHeight);
     [self addSubview:_topScrollView];
+    
     
     //创建分割线
     _lineView = [UIView new];
     _lineView.backgroundColor = [UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0f alpha:1];
-    _lineView.frame = CGRectMake(0, _topScrollView.bounds.size.height, self.bounds.size.width, 0.5);
+    _lineView.frame = CGRectMake(0, self.bounds.size.height-0.5, CurrentScreen_Width, 0.5);
     [self addSubview:_lineView];
-    
+
     //创建阴影view
     _shadowImageView = [[UIImageView alloc] init];
     [_topScrollView addSubview:_shadowImageView];
-    _shadowImageView.backgroundColor = _btnSelectedColor;
-    
+    _shadowImageView.backgroundColor = self.underLineColor?:_btnSelectedColor;
 }
 
 #pragma mark -
@@ -85,10 +88,10 @@ static const CGFloat TopScrollViewHeight = 44.0f;
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
+
     //上半部分
     [self updateButtons];
-    
+
     //更新shadow的位置
     [self updateShadowView];
 }
@@ -100,6 +103,8 @@ static const CGFloat TopScrollViewHeight = 44.0f;
         UIButton *button = _buttons[i];
         CGSize textSize = [self buttonSizeOfTitle:button.currentTitle];
         button.frame = CGRectMake(btnXOffset, 0, textSize.width, _topScrollView.bounds.size.height);
+        UIButton *buttonReal = _buttonsActionReal[i];
+        buttonReal.x = button.maxX;
         [button setTitleColor:_btnNormalColor forState:UIControlStateNormal];
         [button setTitleColor:_btnSelectedColor forState:UIControlStateSelected];
         btnXOffset += textSize.width + ButtonMargin;
@@ -119,6 +124,8 @@ static const CGFloat TopScrollViewHeight = 44.0f;
             CGFloat margin = 0.1*_topScrollView.bounds.size.width;
             float btnWidth = (_topScrollView.bounds.size.width - 2*margin)/_titles.count;
             [button setFrame:CGRectMake(i*btnWidth + margin, 0, btnWidth, TopScrollViewHeight)];
+            UIButton *buttonReal = _buttonsActionReal[i];
+            buttonReal.x = button.maxX;
         }
     }
     
@@ -127,7 +134,6 @@ static const CGFloat TopScrollViewHeight = 44.0f;
     CGFloat conetntWidth = CGRectGetMaxX(button.frame) + ButtonMargin;
     _topScrollView.contentSize = CGSizeMake(conetntWidth, 0);
     if (conetntWidth < _topScrollView.width) {
-        _topScrollView.width = conetntWidth;
         _topScrollView.centerX = self.width/2.0;
     }
 }
@@ -143,11 +149,33 @@ static const CGFloat TopScrollViewHeight = 44.0f;
         _shadowImageView.hidden = NO;
         _shadowImageView.image = [UIImage imageNamed:@"jttopwhite"];
     }else{
-        _shadowImageView.frame = CGRectMake(button.frame.origin.x, CGRectGetMaxY(button.frame) - 1.5,button.bounds.size.width,1.5);
+        CGFloat underLineHeight = self.underLineHeight>0?self.underLineHeight:1.5;
+        _shadowImageView.frame = CGRectMake(button.frame.origin.x, CGRectGetMaxY(button.frame) - underLineHeight - 4,self.underLineWidth > 0 ? self.underLineWidth:button.bounds.size.width,underLineHeight);
+        if (self.undercornerRadius>0) {
+            [_shadowImageView cornerRadiusWithFloat:self.undercornerRadius];
+        }
         _shadowImageView.center = CGPointMake(button.center.x, _shadowImageView.center.y);
-        _shadowImageView.backgroundColor = _btnSelectedColor;
+        _shadowImageView.backgroundColor = self.underLineColor?:_btnSelectedColor;
         //shadow是否隐藏
         _shadowImageView.hidden = _hideShadow;
+    }
+}
+
+- (void)setButtonImage:(NSString *)imageName index:(NSInteger)index target:(id)target action:(SEL)action{
+    UIButton *button = _buttons[index];
+    [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [button layoutButtonForGapBetween:5 layType:0];
+   
+    if (target&&action) {
+        UIButton *clickAreaTarget = _buttonsActionReal[index];
+        if(clickAreaTarget)[clickAreaTarget removeFromSuperview];
+        UIButton *clickArea = [UIButton buttonWithType:(UIButtonTypeSystem)];
+        clickArea.frame = CGRectMake(button.frameInWindow.origin.x, 0, 36, self.height);
+        clickArea.backgroundColor = [UIColor clearColor];
+        [clickArea addTarget:target action:action forControlEvents:1<<6];
+        clickArea.tag = 989;
+        _buttonsActionReal[index]=clickArea;
+        [self addSubview:clickArea];
     }
 }
 
@@ -165,6 +193,7 @@ static const CGFloat TopScrollViewHeight = 44.0f;
         [button addTarget:self action:@selector(buttonSelectedMethod:) forControlEvents:UIControlEventTouchUpInside];
         [_topScrollView addSubview:button];
         [_buttons addObject:button];
+        [_buttonsActionReal addObject:[UIButton buttonWithType:(UIButtonTypeSystem)]];
     }
 }
 

@@ -64,20 +64,19 @@
 }
 /**设置NavagationBar (Left或Right) Button*/
 + (UIBarButtonItem *)setLeftBarButtonItemImageName:(NSString *)imageName TintColor:(UIColor *)color target:(UIViewController *)target action:(SEL)action{
-    UIBarButtonItem *leftButton=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:imageName] style:(UIBarButtonItemStylePlain) target:target action:action];
-    leftButton.tintColor=color;
+    UIBarButtonItem *leftButton=[[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:(UIBarButtonItemStylePlain) target:target action:action];
     target.navigationItem.leftBarButtonItem=leftButton;
     return leftButton;
 }
 + (UIBarButtonItem *)setLeftBarButtonItemImage:(UIImage *)image TintColor:(UIColor *)color target:(UIViewController *)target action:(SEL)action{
-    UIBarButtonItem *leftButton=[[UIBarButtonItem alloc]initWithImage:image style:(UIBarButtonItemStylePlain) target:target action:action];
+    UIBarButtonItem *leftButton=[[UIBarButtonItem alloc]initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:(UIBarButtonItemStylePlain) target:target action:action];
     leftButton.tintColor=color;
     target.navigationItem.leftBarButtonItem=leftButton;
     return leftButton;
 }
 /**设置NavagationBar (Left或Right) Button*/
 + (UIBarButtonItem *)setRightBarButtonItemImage:(NSString *)imageName TintColor:(UIColor *)color target:(UIViewController *)target action:(SEL)action{
-    UIBarButtonItem *rightButton=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:imageName] style:(UIBarButtonItemStylePlain) target:target action:action];
+    UIBarButtonItem *rightButton=[[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:(UIBarButtonItemStylePlain) target:target action:action];
     rightButton.tintColor=color;
     target.navigationItem.rightBarButtonItem=rightButton;
     return rightButton;

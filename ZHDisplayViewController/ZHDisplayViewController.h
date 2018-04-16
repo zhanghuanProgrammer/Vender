@@ -11,6 +11,8 @@
 
 @interface ZHDisplayViewController : UIViewController
 
+@property (nonatomic, weak) UIScrollView *titleScrollView;
+
 @property (nonatomic, assign) CGFloat ZHScreenW;
 
 @property (nonatomic, assign) CGFloat ZHScreenH;
@@ -21,6 +23,8 @@
 
 /**是否需要标题间隔平均*/
 @property (nonatomic, assign) BOOL needAverageTitleWidth;
+/**是否需要标题间隔平均*/
+@property (nonatomic, assign) BOOL selectUseFontWeight;
 
 /**一个屏幕宽度容纳多少个标题*/
 @property (nonatomic, assign) CGFloat averageTitleWidth;
@@ -38,6 +42,7 @@
 
 /*标题滚动视图背景颜色*/
 @property (nonatomic, strong) UIColor* titleScrollViewColor;
+@property (nonatomic,assign)BOOL titleScrollFullWitdh;
 
 /*标题滚动视图底部线条颜色*/
 @property (nonatomic, strong) UIColor* titleScrollViewSplitLineColor;

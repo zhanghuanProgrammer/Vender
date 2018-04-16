@@ -22,6 +22,10 @@
 @property (assign,nonatomic) BOOL hideShadow;
 
 @property (assign,nonatomic) BOOL isUnderArrow;
+@property (nonatomic,assign)CGFloat underLineWidth;
+@property (nonatomic,assign)CGFloat underLineHeight;
+@property (nonatomic,assign)CGFloat undercornerRadius;
+@property (nonatomic,strong)UIColor *underLineColor;
 
 /**
  当前选中位置
@@ -42,5 +46,7 @@
  是否需要自动分配按钮宽度
  */
 @property (assign,nonatomic) BOOL adjustBtnSize2Screen;
+
+- (void)setButtonImage:(NSString *)imageName index:(NSInteger)index target:(id)target action:(SEL)action;
 
 @end
