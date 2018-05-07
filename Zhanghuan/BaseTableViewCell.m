@@ -21,6 +21,7 @@
     return [NSNumber numberWithInteger:-9999];
 }
 - (BOOL)isExsit:(id)obj{
+    if (obj == nil) return NO;
     if ([obj isKindOfClass:[NSNumber class]] && [obj integerValue] == -9999) return NO;
     return YES;
 }
@@ -39,19 +40,19 @@
             if ([value isKindOfClass:[UIImageView class]]) {
                 UIImageView *imageView = (UIImageView *)value;
                 id image = [self dataModel:dataModel valueForKey:key type:@"ImageView"];
-                if ([self isExsit:image] && [self dataModel:dataModel isExsitKey:key]) imageView.mImage(image);
+                if (([image isKindOfClass:[NSString class]]&&[image length]>0) || ([self isExsit:image] && [self dataModel:dataModel isExsitKey:key])) imageView.mImage(image);
             }else if ([value isKindOfClass:[UILabel class]]) {
                 UILabel *label = (UILabel *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"Label"];
-                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) label.mText(text);
+                if (([text isKindOfClass:[NSString class]]&&[text length]>0) || ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key])) label.mText(text);
             }else if ([value isKindOfClass:[UITextView class]]) {
                 UITextView *textView = (UITextView *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"TextView"];
-                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) textView.mText(text);
+                if (([text isKindOfClass:[NSString class]]&&[text length]>0) || ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key])) textView.mText(text);
             }else if ([value isKindOfClass:[UILabel class]]) {
                 UITextField *textField = (UITextField *)value;
                 id text = [self dataModel:dataModel valueForKey:key type:@"TextField"];
-                if ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key]) textField.mText(text);
+                if (([text isKindOfClass:[NSString class]]&&[text length]>0) || ([self isExsit:text] && [self dataModel:dataModel isExsitKey:key])) textField.mText(text);
             }
         }
     }

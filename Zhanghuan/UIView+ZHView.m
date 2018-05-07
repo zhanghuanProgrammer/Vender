@@ -455,6 +455,18 @@
     [self gradientStartColor:startColor endColor:endColor startPoint:startPoint endPoint:endPoint frame:self.frame];
 }
 - (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint frame:(CGRect)frame{
+    [self removeGradient];
+    GradientView *gradient = [[GradientView alloc]initWithFrame:frame];
+    gradient.userInteractionEnabled=NO;
+    gradient.startPoint = startPoint;
+    gradient.endPoint = endPoint;
+    gradient.startColor = startColor;
+    gradient.endColor = endColor;
+    gradient.backgroundColor = [UIColor clearColor];
+    [gradient cornerRadiusWithFloat:self.layer.cornerRadius borderColor:[UIColor colorWithCGColor:self.layer.borderColor] borderWidth:self.layer.borderWidth];
+    [self.superview insertSubview:gradient atIndex:[self.superview.subviews indexOfObject:self]];
+}
+- (void)removeGradient{
     UIView *gradientTarget = nil;
     for (UIView *view in self.superview.subviews) {
         if ([view isKindOfClass:[GradientView class]]) {
@@ -465,15 +477,6 @@
     if (gradientTarget) {
         [gradientTarget removeFromSuperview];
     }
-    GradientView *gradient = [[GradientView alloc]initWithFrame:frame];
-    gradient.userInteractionEnabled=NO;
-    gradient.startPoint = startPoint;
-    gradient.endPoint = endPoint;
-    gradient.startColor = startColor;
-    gradient.endColor = endColor;
-    gradient.backgroundColor = [UIColor clearColor];
-    [gradient cornerRadiusWithFloat:self.layer.cornerRadius borderColor:[UIColor colorWithCGColor:self.layer.borderColor] borderWidth:self.layer.borderWidth];
-    [self.superview insertSubview:gradient atIndex:[self.superview.subviews indexOfObject:self]];
 }
 
 @end

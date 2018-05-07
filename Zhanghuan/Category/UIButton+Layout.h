@@ -23,4 +23,11 @@
  */
 -(void)layoutButtonForGapBetween:(CGFloat)gap
                          layType:(NSInteger)layType;
+
+@end
+
+@interface UILabel (Layout)
+
+@property (nonatomic, assign) UIEdgeInsets yf_contentInsets;
+
 @end

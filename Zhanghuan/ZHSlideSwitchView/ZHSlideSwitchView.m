@@ -224,15 +224,17 @@ static const CGFloat TopScrollViewHeight = 48.0f;
         }
     }
     
+    if ([_delegate respondsToSelector:@selector(slideSwitchDidselectTab:)]) {
+        [_delegate slideSwitchDidselectTab:index];
+    }
+    
     [UIView animateWithDuration:0.35 animations:^{
         //更新TopScrollView的farme
         [self adjustTopScrollView:_buttons[index]];
         //更新shadow的frame
         [self updateShadowView];
     } completion:^(BOOL finished) {
-        if ([_delegate respondsToSelector:@selector(slideSwitchDidselectTab:)]) {
-            [_delegate slideSwitchDidselectTab:index];
-        }
+        
     }];
 }
 

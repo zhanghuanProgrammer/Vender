@@ -1,5 +1,6 @@
 
 #import <UIKit/UIKit.h>
+@class RTIdentify;
 
 typedef enum : NSInteger{
     ZFSettingItemTypeNone, // 什么也没有
@@ -7,7 +8,9 @@ typedef enum : NSInteger{
     ZFSettingItemTypeSwitch // 开关
 } ZFSettingItemType;
 
-@interface ZFSettingItem : NSObject
+@interface RTSettingItem : NSObject
+
+@property (nonatomic,assign)CGFloat height;
 
 @property (nonatomic, copy) NSString *icon;
 
@@ -30,6 +33,16 @@ typedef enum : NSInteger{
 
 @property (nonatomic, strong) UIColor *subTitleColor;
 
+@property (nonatomic,strong)UIView *customArrowView;
+
+@property (nonatomic,assign)BOOL on;
+
+@property (nonatomic,assign)BOOL isEdit;
+@property (nonatomic,assign)BOOL isSelect;
+@property (nonatomic,assign)NSInteger row;
+
+@property (nonatomic,strong)RTIdentify *identify;
+@property (nonatomic,copy)NSString *stamp;
 /** cell上开关的操作事件 */
 @property (nonatomic, copy) void (^switchBlock)(BOOL on) ;
 

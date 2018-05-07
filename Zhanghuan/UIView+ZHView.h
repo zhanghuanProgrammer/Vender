@@ -96,5 +96,6 @@
 - (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
 - (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor frame:(CGRect)frame;
 - (void)gradientStartColor:(UIColor *)startColor endColor:(UIColor *)endColor startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint frame:(CGRect)frame;
+- (void)removeGradient;
 
 @end
